@@ -1,0 +1,174 @@
+# GÊMEO DIGITAL TÉRMICO DE HARDWARE COMPUTACIONAL
+
+### Placa GPU de Inferência de IA em Operação Contínua
+
+**Duração estimada:** 4 a 5 minutos
+**Apresentação:** Luiz Guilherme Oliveira Jardim e Breno Lopes Souza
+
+---
+
+## 0:00 – 0:25 | Abertura
+
+**[TELA: título do projeto + nomes + CEUB]**
+
+**FALA:**
+
+Olá, somos Luiz Guilherme Oliveira Jardim e Breno Lopes Souza, estudantes de Engenharia de Software do CEUB.
+
+Neste projeto, desenvolvido na disciplina de Fundamentos de Engenharia, construímos um **gêmeo digital térmico de hardware computacional**, tendo como foco uma GPU destinada à inferência de inteligência artificial em operação contínua.
+
+Nosso objetivo foi projetar e analisar uma solução de dissipação térmica antes da construção física, integrando **CAD, transferência de calor, ciência dos materiais, mecânica dos sólidos, química e sustentabilidade**.
+
+---
+
+## 0:25 – 0:55 | Problema e objetivo
+
+**[TELA: imagem da GPU / esquema do sistema]**
+
+**FALA:**
+
+O problema surgiu porque aplicações de inteligência artificial podem manter uma GPU em alta utilização durante longos períodos.
+
+Nesse cenário, a temperatura deixa de ser apenas uma questão de desempenho e passa a ser também uma questão de **confiabilidade e vida útil**.
+
+Por isso, estabelecemos como objetivo desenvolver um modelo capaz de verificar se um sistema de dissipação consegue manter a temperatura abaixo de um **limite de projeto de 80 graus Celsius**, considerando uma operação contínua de 24 horas por dia.
+
+Como referência de carga térmica, adotamos a **NVIDIA L4**, com potência térmica de projeto de **72 watts**. Para a condição nominal, utilizamos ambiente de 25 graus Celsius.
+
+---
+
+## 0:55 – 1:35 | Escolha do material
+
+**[TELA: tabela Alumínio 6061 × Cobre C110]**
+
+**FALA:**
+
+Uma das principais decisões foi escolher o material do dissipador.
+
+Comparamos o **alumínio 6061** com o **cobre C110**.
+
+O cobre possui uma condutividade térmica maior, aproximadamente 388 watts por metro-kelvin, enquanto o alumínio 6061 foi considerado com aproximadamente 160 watts por metro-kelvin.
+
+Então, por que não escolher o cobre?
+
+Porque a decisão não deve considerar somente a condutividade térmica.
+
+O cobre possui densidade muito maior, além de apresentar maior custo. Já o alumínio oferece **menor massa, boa condutividade, facilidade de fabricação e alta reciclabilidade**.
+
+Portanto, nossa decisão foi utilizar o alumínio 6061, compensando sua menor condutividade com uma geometria adequada de aletas e ventilação forçada.
+
+Essa é uma das principais decisões de engenharia do projeto: **a melhor solução global não é necessariamente aquela que possui a melhor propriedade isolada**.
+
+---
+
+## 1:35 – 2:05 | Modelagem CAD
+
+**[TELA: abrir o modelo CAD e girar o conjunto]**
+
+**FALA:**
+
+A partir dessa decisão, desenvolvemos o modelo CAD do sistema.
+
+O dissipador possui uma base de **170 por 70 por 5 milímetros**, com **12 aletas longitudinais**, cada uma com 2 milímetros de espessura e 25 milímetros de altura.
+
+A altura total do dissipador chega a 30 milímetros.
+
+Além do dissipador, estruturamos no modelo digital elementos conceituais para representar a integração do sistema, como a GPU de referência, a interface térmica, duas ventoinhas de 60 milímetros, a carenagem e elementos de fixação.
+
+É importante destacar que esses elementos adicionais são **hipóteses conceituais de projeto**, utilizadas para representar o sistema completo, e não devem ser interpretados como dimensões oficiais da NVIDIA.
+
+---
+
+## 2:05 – 2:55 | Simulação térmica
+
+**[TELA: notebook Google Colab + equação]**
+
+**FALA:**
+
+Depois da modelagem geométrica, partimos para a simulação térmica.
+
+Utilizamos uma abordagem numérica por **diferenças finitas**, considerando a condução de calor dentro do dissipador e a convecção nas superfícies expostas ao ar.
+
+A equação utilizada no sólido é:
+
+**“divergente de k gradiente de T mais q igual a zero”.**
+
+Na fronteira, utilizamos uma condição convectiva do tipo Robin, relacionando o fluxo de calor com a diferença entre a temperatura da superfície e a temperatura ambiente.
+
+No notebook em Python, utilizamos principalmente **NumPy e Matplotlib**, além do **CoolProp para propriedades do ar quando disponível**.
+
+Também adotamos algumas simplificações: regime permanente, condutividade constante do alumínio, ambiente a 25 graus Celsius e radiação térmica desprezada.
+
+---
+
+## 2:55 – 3:35 | Resultados e defesa
+
+**[TELA: gráfico Tmax × coeficiente convectivo]**
+
+**FALA:**
+
+E aqui está um dos resultados mais importantes do projeto.
+
+Variamos o coeficiente de convecção para representar diferentes condições de fluxo de ar.
+
+Com **h igual a 40 watts por metro quadrado-kelvin**, a temperatura máxima calculada foi de aproximadamente **41,7 graus Celsius**.
+
+Isso representa uma margem de aproximadamente **38,3 graus** em relação ao nosso limite de projeto de 80 graus.
+
+Por outro lado, quando reduzimos a convecção para **h igual a 10**, a temperatura máxima sobe para aproximadamente **84,2 graus**, ultrapassando o limite.
+
+Isso demonstra uma conclusão fundamental do projeto:
+
+**o fluxo de ar é um dos parâmetros mais críticos para a segurança térmica do sistema.**
+
+Por isso, não basta possuir um bom dissipador. É necessário garantir que o fluxo de ar seja mantido durante a operação.
+
+---
+
+## 3:35 – 4:05 | Mecânica, sustentabilidade e limitações
+
+**[TELA: expansão térmica + ícones de energia/sustentabilidade]**
+
+**FALA:**
+
+Também analisamos a expansão térmica do alumínio, considerando seu coeficiente de expansão e os efeitos de restrições mecânicas.
+
+Na condição de ventilação forçada, a expansão estimada ao longo dos 170 milímetros foi de aproximadamente **0,065 milímetro**, mostrando que a operação normal apresenta uma deformação relativamente pequena.
+
+Além disso, estimamos o consumo energético anual e propusemos melhorias como **controle PWM das ventoinhas, power capping, utilização de alumínio reciclado, projeto para desmontagem e reutilização da GPU**.
+
+O modelo, porém, possui limitações. Ele não representa detalhadamente a turbulência tridimensional, a radiação, a recirculação de ar, o encapsulamento real da GPU, memória, VRMs e anisotropia da PCB.
+
+Em uma evolução futura, poderíamos utilizar **CFD ou elementos finitos 3D** para aumentar a fidelidade.
+
+---
+
+## 4:05 – 4:35 | Integração do gêmeo digital
+
+**[TELA: estrutura do GitHub]**
+
+**FALA:**
+
+Por fim, integramos todos os resultados em uma estrutura de projeto reproduzível.
+
+O repositório reúne o **relatório técnico, os arquivos CAD em formatos como STEP e STL, o script paramétrico, os parâmetros do modelo e o notebook de simulação em Python para execução no Google Colab**.
+
+Assim, outra pessoa pode acessar o projeto, modificar parâmetros como potência, geometria ou coeficiente de convecção e reproduzir a análise.
+
+Dessa forma, o projeto deixa de ser apenas um relatório e passa a representar um **gêmeo digital documentado e reproduzível**.
+
+---
+
+## 4:35 – 4:55 | Conclusão
+
+**[TELA: modelo CAD + resultado térmico lado a lado]**
+
+**FALA:**
+
+Como conclusão, o projeto mostrou que um dissipador de **alumínio 6061 com 12 aletas e ventilação forçada** consegue atender ao nosso critério térmico na condição analisada.
+
+Mais importante do que o valor final de temperatura foi perceber que a solução depende da integração entre **material, geometria, transferência de calor, mecânica, energia e sustentabilidade**.
+
+Portanto, nossa principal conclusão é que o desempenho térmico não deve ser analisado isoladamente: ele precisa fazer parte de uma decisão de engenharia multidisciplinar.
+
+Obrigado pela atenção.
